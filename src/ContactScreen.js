@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 function ContactScreen() {
     return (
         <>
-            <Container maxWidth="md">
+            <Container maxWidth="md" sx={{ marginBottom: 60 }}>
                 <Typography>
                     Developed by Mengyan Wu (mengyanw@umich.edu), Yuxiao Liu, Zihui Liu
                 </Typography>

@@ -17,7 +17,7 @@ function HomeScreen() {
         setRunningResult(TopNIndex)
     }
     return (
-        <Container maxWidth="md">
+        <Container maxWidth="md" sx={{ marginBottom: 60 }}>
             <Button variant='outlined' onClick={handleDemoRequest}>Demo</Button>
             {runningResult}
             {/* <Copyright /> */}
