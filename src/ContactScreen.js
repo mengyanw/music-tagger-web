@@ -7,8 +7,13 @@ function ContactScreen() {
     return (
         <>
             <Container maxWidth="md" sx={{ marginBottom: 60 }}>
-                <Typography>
-                    Developed by Mengyan Wu (mengyanw@umich.edu), Yuxiao Liu, Zihui Liu
+                <Typography variant="h6" sx={{ mb: 5 }}>
+                    Developed by
+                </Typography>
+                <Typography variant="body1">
+                    Mengyan Wu (mengyanw@umich.edu), <br /> 
+                    Yuxiao Liu (lyuxiao@umich.edu), <br />
+                    Zihui Liu (zihuiliu@umich.edu)<br /> 
                 </Typography>
             </Container>
         </>

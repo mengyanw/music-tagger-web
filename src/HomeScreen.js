@@ -1,30 +1,156 @@
 import React from "react";
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+
+import Grid from '@mui/material/Grid';
+
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+
 
 import { useState } from "react";
-import { AUDIO_PATH, MODEL_PATH, Demo } from "./utils";
+import { 
+    AUDIO_PATH, MODEL_PATH, 
+    Demo,
+    LoadMp3, GenerateMelSpec, CropAndFlatten, CreateONNXTensor, RunModel, FinalizeResult } from "./utils"
 
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+}));
 
 
 function HomeScreen() {
+    const [audioPath, setAudioPath] = useState('./1.mp3');
+    const [modelPath, setModelPath] = useState('./baseline.onnx');
+    const [loading, setLoading] = useState(false)
     const [runningResult, setRunningResult] = useState([]);
-    const handleDemoRequest = async () => {
-        const TopNIndex = await Demo(AUDIO_PATH, MODEL_PATH);
-        setRunningResult(TopNIndex)
+    const [processDesc, setProcessDesc] = useState([])
+
+    const handleRunningRequest = async () => {
+        setRunningResult([])
+        setProcessDesc([])
+        setLoading(true);
+        
+        setProcessDesc((prev) => [...prev, "Loading MP3 file 🎵"])
+        const audioBuffer = await LoadMp3(audioPath)
+        setProcessDesc((prev) => [...prev, "Resampling and converting signal ⌛️"])
+        setProcessDesc((prev) => [...prev, "Generating mel spectrogram (This step usually takes longer) ⌛️"])
+        const melSpec = await GenerateMelSpec(audioBuffer)
+        setProcessDesc((prev) => [...prev, "Cropping and flattening data ⌛️"])
+        const processedData = await CropAndFlatten(melSpec)
+        setProcessDesc((prev) => [...prev, "Creating tensor ⌛️"])
+        const inputTensor = await CreateONNXTensor(processedData)
+        setProcessDesc((prev) => [...prev, "Running model ⌛️"])
+        const outputMap = await RunModel(inputTensor, modelPath)
+        setProcessDesc((prev) => [...prev, "Grabbing results ☕️"])
+        const result = await FinalizeResult(outputMap)
+        setProcessDesc((prev) => [...prev, "Finished 🎉🎉🎉"])
+        
+        setRunningResult(result)
+        setLoading(false)
     }
+
     return (
-        <Container maxWidth="md" sx={{ marginBottom: 60 }}>
-            <Button variant='outlined' onClick={handleDemoRequest}>Demo</Button>
-            {runningResult}
-            {/* <Copyright /> */}
+        <Container maxWidth="md" sx={{ marginBottom: 10 }}>
+            <Container sx={{ display: 'flex', flexDirection: 'row', mb: 5, mr: 5}}>
+                <Container disableGutters>
+                    <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
+                        <InputLabel id="demo-select-small">Audio</InputLabel>
+                        <Select
+                            labelId="demo-select-small"
+                            id="demo-select-small"
+                            value={audioPath}
+                            label="Audio"
+                            onChange={(event) => setAudioPath(event.target.value)}
+                        >
+                            <MenuItem value={'./1.mp3'}>1.mp3</MenuItem>
+                            <MenuItem value={'./2.mp3'}>2.mp3</MenuItem>
+                            <MenuItem value={'./3.mp3'}>3.mp3</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
+                        <InputLabel id="demo-select-small">Model</InputLabel>
+                        <Select
+                            labelId="demo-select-small"
+                            id="demo-select-small"
+                            value={modelPath}
+                            label="Model"
+                            onChange={(event) => setModelPath(event.target.value)}
+                        >
+                            <MenuItem value={'./baseline.onnx'}>Baseline model</MenuItem>
+                            <MenuItem value={'./test.onnx'}>Test model</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Container>
+
+                <Button 
+                    variant='outlined' 
+                    onClick={handleRunningRequest}
+                    sx={{ width: '10rem', mr: 1}} 
+                >
+                    Run
+                </Button>
+            </Container>
+            <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 1, sm: 4 }}>
+                    <Grid item xs={1} sm={2} key={0}>
+                        <Card sx={{ minWidth: 275, minHeight: 400 }}>
+                            <CardContent>
+                                <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary" gutterBottom>
+                                    Process
+                                </Typography>
+                                <List dense={true}>
+                                    {processDesc && processDesc.map((line, idx) => (
+                                        <ListItem key={idx + 1}>
+                                            <ListItemText
+                                                primary={line}
+                                            />
+                                        </ListItem>
+                                    ))}
+                                    <ListItem key={0}>
+                                        {loading && <CircularProgress size="1.5rem" />}
+                                    </ListItem>
+                                </List>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    {runningResult !== [] &&
+                    <Grid item xs={1} sm={2} key={1}>
+                        <Card sx={{ minWidth: 275, minHeight: 400 }}>
+                            <CardContent>
+                                <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary" gutterBottom>
+                                    Result
+                                </Typography>
+                                <Stack direction="column" spacing={4}>
+                                    {runningResult.map(each => <Item key={each}>{each}</Item>)}
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    }
+                </Grid>
+            </Box>
         </Container>
-        // {/* <ContactScreen /> */}
-        // {/* <ReportScreen /> */}
-        // <Copyright />
     );
 }
 

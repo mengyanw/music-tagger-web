@@ -1,5 +1,6 @@
-const AUDIO_PATH = "./7400.low.mp3"
-const MODEL_PATH = "./test.onnx"
+import tags from "./tags"
+const AUDIO_PATH = "./1.mp3"
+const MODEL_PATH = "./baseline.onnx"
 
 const SAMPLE_RATE = 44100
 const HOP_LENGTH = 441
@@ -25,11 +26,11 @@ async function LoadMp3(audio_path) {
     console.log("Loading mp3...")
     const audioBuffer = await loadAudioFromUrl(audio_path)
 
-    console.log(audioBuffer)
+    // console.log(audioBuffer)
     return audioBuffer
 }
 
-async function PreprocessData(audioBuffer) {
+async function GenerateMelSpec(audioBuffer) {
     console.log("Resampling and converting signal to mono...")
     const resampledMono = await resampleAndMakeMono(audioBuffer, 44100)
 
@@ -45,6 +46,10 @@ async function PreprocessData(audioBuffer) {
         fMax: F_MAX
     });
 
+    return melSpec
+}
+
+async function CropAndFlatten(melSpec) {
     console.log("Padding or Cropping...")
     const originalLength = melSpec.length
     // TODO
@@ -60,39 +65,55 @@ async function PreprocessData(audioBuffer) {
     const processedData = flatten(adjustedMelSpectrogram)
 
     console.log("Finish data preprocessing")
-    console.log(processedData)
+    // console.log(processedData)
     return processedData
 }
 
-async function RunModel(processedData, modelPath) {
+async function CreateONNXTensor(processedData) {
     console.log("Converting data to onnx tensor...")
     const inputTensor = new onnx.Tensor(processedData, 'float32', [1, 1, 128, 1000])
+    return inputTensor
+}
 
+async function RunModel(inputTensor, modelPath) {
     console.log("Loading model...")
     let session = new onnx.InferenceSession()
     await session.loadModel(modelPath);
 
     console.log("Running Model...")
     let outputMap = await session.run([inputTensor])
+    return outputMap
+}
 
+async function FinalizeResult(outputMap) {
     console.log("Result")
     let outputData = outputMap.values().next().value.data
 
     console.log("Top 5 classes (index)")
     const TopN = outputData.slice().sort((a, b) => b - a).slice(0, 5)
     const TopNIndex = []
+    const TopNTags = []
     for (let i = 0; i < 5; i++) {
         TopNIndex.push(outputData.indexOf(TopN[i]))
+        TopNTags.push(tags[outputData.indexOf(TopN[i])])
     }
-    return TopNIndex
+    console.log(TopNIndex, TopNTags)
+    return TopNTags
 }
 
 async function Demo(audioPath, modelPath) {
     const audioBuffer = await LoadMp3(audioPath)
-    const processedData = await PreprocessData(audioBuffer)
-    const result = await RunModel(processedData, modelPath)
-    console.log(result)
+    const melSpec = await GenerateMelSpec(audioBuffer)
+    const processedData = await CropAndFlatten(melSpec)
+    const inputTensor = await CreateONNXTensor(processedData)
+    const outputMap = await RunModel(inputTensor, modelPath)
+    const result = await FinalizeResult(outputMap)
     return result
 }
 
-export { AUDIO_PATH, MODEL_PATH, Demo }
+
+export { 
+    AUDIO_PATH, MODEL_PATH, 
+    Demo, 
+    LoadMp3, GenerateMelSpec, CropAndFlatten, CreateONNXTensor, RunModel, FinalizeResult
+}
