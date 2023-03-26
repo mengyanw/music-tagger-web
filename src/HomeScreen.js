@@ -86,6 +86,10 @@ function HomeScreen() {
                             <MenuItem value={'./1.mp3'}>1.mp3</MenuItem>
                             <MenuItem value={'./2.mp3'}>2.mp3</MenuItem>
                             <MenuItem value={'./3.mp3'}>3.mp3</MenuItem>
+                            <MenuItem value={'./shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
+                            <MenuItem value={'./running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
+                            <MenuItem value={'./red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem>
+                            
                         </Select>
                     </FormControl>
                     <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
@@ -117,7 +121,7 @@ function HomeScreen() {
                         <Card sx={{ minWidth: 275, minHeight: 400 }}>
                             <CardContent>
                                 <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary" gutterBottom>
-                                    Process
+                                    Progress
                                 </Typography>
                                 <List dense={true}>
                                     {processDesc && processDesc.map((line, idx) => (

@@ -23,7 +23,7 @@ function flatten(melSpec) {
 }
 
 async function LoadMp3(audio_path) {
-    console.log("Loading mp3...")
+    console.log("Loading mp3...", audio_path)
     const audioBuffer = await loadAudioFromUrl(audio_path)
 
     // console.log(audioBuffer)

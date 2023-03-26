@@ -11,8 +11,8 @@ function ContactScreen() {
                     Developed by
                 </Typography>
                 <Typography variant="body1">
-                    Mengyan Wu (mengyanw@umich.edu), <br /> 
-                    Yuxiao Liu (lyuxiao@umich.edu), <br />
+                    Mengyan Wu (mengyanw@umich.edu) <br /> 
+                    Yuxiao Liu (lyuxiao@umich.edu) <br />
                     Zihui Liu (zihuiliu@umich.edu)<br /> 
                 </Typography>
             </Container>
