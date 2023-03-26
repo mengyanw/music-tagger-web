@@ -9,7 +9,6 @@ import Select from '@mui/material/Select';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
@@ -23,12 +22,16 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 
+import Player from 'react-material-music-player'
+import { Track, PlayerInterface } from 'react-material-music-player'
+
 
 import { useState } from "react";
-import { 
-    AUDIO_PATH, MODEL_PATH, 
-    Demo,
-    LoadMp3, GenerateMelSpec, CropAndFlatten, CreateONNXTensor, RunModel, FinalizeResult } from "./utils"
+import {
+    // AUDIO_PATH, MODEL_PATH,
+    // Demo,
+    LoadMp3, GenerateMelSpec, CropAndFlatten, CreateONNXTensor, RunModel, FinalizeResult
+} from "./utils"
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -46,11 +49,14 @@ function HomeScreen() {
     const [runningResult, setRunningResult] = useState([]);
     const [processDesc, setProcessDesc] = useState([])
 
+    const currTrack = new Track(audioPath, "./abcover.png", audioPath.slice(2,), "", audioPath)
+    PlayerInterface.play([currTrack])
+
     const handleRunningRequest = async () => {
         setRunningResult([])
         setProcessDesc([])
         setLoading(true);
-        
+
         setProcessDesc((prev) => [...prev, "Loading MP3 file 🎵"])
         const audioBuffer = await LoadMp3(audioPath)
         setProcessDesc((prev) => [...prev, "Resampling and converting signal ⌛️"])
@@ -65,14 +71,14 @@ function HomeScreen() {
         setProcessDesc((prev) => [...prev, "Grabbing results ☕️"])
         const result = await FinalizeResult(outputMap)
         setProcessDesc((prev) => [...prev, "Finished 🎉🎉🎉"])
-        
+
         setRunningResult(result)
         setLoading(false)
     }
 
     return (
         <Container maxWidth="md" sx={{ marginBottom: 10 }}>
-            <Container sx={{ display: 'flex', flexDirection: 'row', mb: 5, mr: 5}}>
+            <Container sx={{ display: 'flex', flexDirection: 'row', mb: 2, mr: 5 }}>
                 <Container disableGutters>
                     <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
                         <InputLabel id="demo-select-small">Audio</InputLabel>
@@ -89,7 +95,7 @@ function HomeScreen() {
                             <MenuItem value={'./shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
                             <MenuItem value={'./running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
                             <MenuItem value={'./red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem>
-                            
+
                         </Select>
                     </FormControl>
                     <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
@@ -107,18 +113,21 @@ function HomeScreen() {
                     </FormControl>
                 </Container>
 
-                <Button 
-                    variant='outlined' 
+                <Button
+                    variant='outlined'
                     onClick={handleRunningRequest}
-                    sx={{ width: '10rem', mr: 1}} 
+                    sx={{ width: '10rem', mr: 1 }}
                 >
                     Run
                 </Button>
             </Container>
+
+            <Player sx={{ width: '53em', display: 'block', position: 'relative', mb: 5, boxShadow: 1 }} disableDrawer={false} />
+
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 1, sm: 4 }}>
                     <Grid item xs={1} sm={2} key={0}>
-                        <Card sx={{ minWidth: 275, minHeight: 400 }}>
+                        <Card sx={{ minWidth: 275, minHeight: 420 }}>
                             <CardContent>
                                 <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary" gutterBottom>
                                     Progress
@@ -138,20 +147,20 @@ function HomeScreen() {
                             </CardContent>
                         </Card>
                     </Grid>
-                    {runningResult !== [] &&
                     <Grid item xs={1} sm={2} key={1}>
-                        <Card sx={{ minWidth: 275, minHeight: 400 }}>
+                        <Card sx={{ minWidth: 275, minHeight: 420 }}>
                             <CardContent>
                                 <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary" gutterBottom>
                                     Result
                                 </Typography>
                                 <Stack direction="column" spacing={4}>
-                                    {runningResult.map(each => <Item key={each}>{each}</Item>)}
+                                {runningResult !== [] &&
+                                    runningResult.map(each => <Item key={each}>{each}</Item>)
+                                }
                                 </Stack>
                             </CardContent>
                         </Card>
                     </Grid>
-                    }
                 </Grid>
             </Box>
         </Container>
