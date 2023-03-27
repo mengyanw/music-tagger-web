@@ -1,6 +1,6 @@
 import tags from "./tags"
 const AUDIO_PATH = "./1.mp3"
-const MODEL_PATH = "./baseline.onnx"
+const MODEL_PATH = "./crnn.onnx"
 
 const SAMPLE_RATE = 44100
 const HOP_LENGTH = 441
@@ -9,6 +9,12 @@ const N_MELS = 128
 const F_MIX = 0
 const F_MAX = 22050
 
+// const SAMPLE_RATE = 16000
+// const HOP_LENGTH = 160
+// const N_FFT = 512
+// const N_MELS = 96
+// const F_MIX = 0
+// const F_MAX = 8000
 const CLIP_LENGTH = 1000
 
 function flatten(melSpec) {
@@ -26,16 +32,26 @@ async function LoadMp3(audio_path) {
     console.log("Loading mp3...", audio_path)
     const audioBuffer = await loadAudioFromUrl(audio_path)
 
-    // console.log(audioBuffer)
+    console.log(audioBuffer)
     return audioBuffer
 }
 
 async function GenerateMelSpec(audioBuffer) {
     console.log("Resampling and converting signal to mono...")
     const resampledMono = await resampleAndMakeMono(audioBuffer, 44100)
+    console.log(resampledMono)
+
+    let croppedMono;
+    let desiredLength = 500000
+    const originalLength = resampledMono.length
+    if (originalLength > desiredLength) {
+        const cropSize = originalLength - desiredLength
+        const start = Math.floor(Math.random() * cropSize)
+        croppedMono = resampledMono.slice(start, start + desiredLength)
+    }
 
     console.log("Creating mel-spectrogram...")
-    const melSpec = melSpectrogram(resampledMono, {
+    const melSpec = melSpectrogram(croppedMono, {
         sampleRate: SAMPLE_RATE,
         hopLength: HOP_LENGTH,
         // winLength?: number,
@@ -46,6 +62,7 @@ async function GenerateMelSpec(audioBuffer) {
         fMax: F_MAX
     });
 
+    console.log(melSpec)
     return melSpec
 }
 
@@ -112,8 +129,8 @@ async function Demo(audioPath, modelPath) {
 }
 
 
-export { 
-    AUDIO_PATH, MODEL_PATH, 
-    Demo, 
+export {
+    AUDIO_PATH, MODEL_PATH,
+    Demo,
     LoadMp3, GenerateMelSpec, CropAndFlatten, CreateONNXTensor, RunModel, FinalizeResult
 }

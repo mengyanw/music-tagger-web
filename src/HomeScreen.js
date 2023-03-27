@@ -60,7 +60,7 @@ function HomeScreen() {
         setProcessDesc((prev) => [...prev, "Loading MP3 file 🎵"])
         const audioBuffer = await LoadMp3(audioPath)
         setProcessDesc((prev) => [...prev, "Resampling and converting signal ⌛️"])
-        setProcessDesc((prev) => [...prev, "Generating mel spectrogram (This step usually takes longer) ⌛️"])
+        setProcessDesc((prev) => [...prev, "Generating mel spectrogram ⌛️"])
         const melSpec = await GenerateMelSpec(audioBuffer)
         setProcessDesc((prev) => [...prev, "Cropping and flattening data ⌛️"])
         const processedData = await CropAndFlatten(melSpec)
@@ -108,6 +108,7 @@ function HomeScreen() {
                             onChange={(event) => setModelPath(event.target.value)}
                         >
                             <MenuItem value={'./baseline.onnx'}>Baseline model</MenuItem>
+                            {/* <MenuItem value={'./crnn.onnx'}>CRNN model</MenuItem>  */}
                             <MenuItem value={'./test.onnx'}>Test model</MenuItem>
                         </Select>
                     </FormControl>

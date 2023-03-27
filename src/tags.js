@@ -15,4 +15,18 @@ export default [
     'rock', 'rocknroll', 'singersongwriter', 'ska', 'soul', 'soundtrack',
     'swing', 'symphonic', 'synthpop', 'techno', 'trance', 'tribal',
     'triphop', 'world', 'worldfusion'
+    // 'genre---downtempo', 'genre---ambient', 'genre---rock', 'instrument---synthesizer',
+    // 'genre---atmospheric', 'genre---indie', 'genre---techno', 'genre---newage',
+    // 'genre---alternative', 'genre---easylistening', 'genre---instrumentalpop',
+    // 'genre---chillout', 'genre---metal', 'genre---lounge', 'genre---reggae',
+    // 'genre---popfolk', 'genre---orchestral', 'genre---poprock', 'genre---trance',
+    // 'genre---dance', 'genre---soundtrack', 'genre---house', 'genre---hiphop', 'genre---classical',
+    // 'genre---electronic', 'genre---world', 'genre---experimental', 'genre---folk',
+    // 'genre---triphop', 'genre---jazz', 'genre---funk', 'genre---pop',
+    // 'instrument---strings', 'instrument---drums', 'instrument---drummachine',
+    // 'instrument---electricpiano', 'instrument---guitar', 'instrument---acousticguitar',
+    // 'instrument---piano', 'instrument---electricguitar', 'instrument---violin',
+    // 'instrument---voice', 'instrument---keyboard', 'instrument---bass', 'instrument---computer',
+    // 'mood/theme---energetic', 'mood/theme---happy', 'mood/theme---emotional', 'mood/theme---film',
+    // 'mood/theme---relaxing'
 ]
