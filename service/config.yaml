@@ -1,0 +1,7 @@
+sample_rate: 20480
+hop_length: 20
+n_fft: 512
+n_mels: 128
+fmin: 0
+fmax: 8000
+topk: 5
