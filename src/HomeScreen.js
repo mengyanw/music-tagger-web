@@ -57,7 +57,7 @@ function HomeScreen() {
         if (isInitial) setIsInitial(false)
 
         const formData = new FormData();
-        
+
         formData.append('audioPath', serviceAudioPath);
         formData.append('modelPath', '../public/model/' + modelPath);
         console.log(formData);
@@ -77,7 +77,7 @@ function HomeScreen() {
         // const result = await FinalizeResult(outputMap)
         // setProcessDesc((prev) => [...prev, "Finished 🎉🎉🎉"])
 
-        fetch('http://10.169.0.155:4000/predict2/', {
+        fetch('http://127.0.0.1:5000/predict2/', {
             method: 'POST',
             body: formData
         })
@@ -97,7 +97,7 @@ function HomeScreen() {
 
     return (
         <Container maxWidth="md" sx={{ marginBottom: 10 }}>
-            <Container sx={{ display: 'flex', flexDirection: 'column', mb: 2}}>
+            <Container sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
                 <Container disableGutters sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', }}>
                     <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
                         <InputLabel id="demo-select-small">Model</InputLabel>
@@ -127,7 +127,7 @@ function HomeScreen() {
                                 <MenuItem value={'3.mp3'}>Example 3.mp3</MenuItem>
                                 <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
                                 <MenuItem value={'running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
-                                <MenuItem value={'red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem>
+                                {/* <MenuItem value={'red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem> */}
                                 {uploadedAudio ? <MenuItem value={uploadedAudio.path}>{uploadedAudio.name}</MenuItem> : {}}
                             </Select>
                         </FormControl>
@@ -145,7 +145,7 @@ function HomeScreen() {
                                 hidden
                                 accept=".mp3"
                                 onChange={(e) => {
-                                    let uploadPath = URL.createObjectURL(e.target.files[0]) 
+                                    let uploadPath = URL.createObjectURL(e.target.files[0])
                                     setAudioPath(uploadPath)
                                     setUploadedAudio({ name: e.target.files[0].name, path: uploadPath })
                                 }}
@@ -153,12 +153,12 @@ function HomeScreen() {
                         </Button>
                     </Container>
                 </Container>
-                <audio src={playerAudioPath} controls style={{width: '90%', padding: '1rem', margin: 'auto'}}/>
+                <audio src={playerAudioPath} controls style={{ width: '90%', padding: '1rem', margin: 'auto' }} />
                 <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Button
                         variant='contained'
                         onClick={handleRunningRequest}
-                        sx={{ minWidth: 200, ml: 1}}
+                        sx={{ minWidth: 200, ml: 1 }}
                     >
                         Run
                     </Button>
@@ -195,8 +195,8 @@ function HomeScreen() {
                                 <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary" gutterBottom>
                                     Result
                                 </Typography>
-                                {loading ? <Typography>Loading...</Typography> : 
-                                    (isInitial ? <div></div> : 
+                                {loading ? <Typography>Loading...</Typography> :
+                                    (isInitial ? <div></div> :
                                         <TableContainer component={Paper}>
                                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                                 <TableHead>
@@ -214,7 +214,7 @@ function HomeScreen() {
                                                         >
                                                             <TableCell align="center">{row.Category}</TableCell>
                                                             <TableCell align="center">{row.Tag}</TableCell>
-                                                            <TableCell align="center">{row.Probability}</TableCell>
+                                                            <TableCell align="center">{row.Probability.toFixed(4)}</TableCell>
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>
