@@ -60,7 +60,11 @@ function HomeScreen() {
 
         formData.append('audioPath', serviceAudioPath);
         formData.append('modelPath', '../public/model/' + modelPath);
-        console.log(formData);
+
+        const uploadedAudioFile = audioPath === uploadedAudio?.path ? uploadedAudio?.file : undefined 
+        formData.append('uploadedAudio', uploadedAudioFile)
+           
+        console.log(formData.get('audioPath'), formData.get('uploadedAudio'));
 
         // setProcessDesc((prev) => [...prev, "Loading MP3 file 🎵"])
         // const audioBuffer = await LoadMp3(audioPath)
@@ -77,7 +81,7 @@ function HomeScreen() {
         // const result = await FinalizeResult(outputMap)
         // setProcessDesc((prev) => [...prev, "Finished 🎉🎉🎉"])
 
-        fetch('http://127.0.0.1:5000/predict2/', {
+        fetch('http://127.0.0.1:5000/predict/', {
             method: 'POST',
             body: formData
         })
@@ -147,7 +151,7 @@ function HomeScreen() {
                                 onChange={(e) => {
                                     let uploadPath = URL.createObjectURL(e.target.files[0])
                                     setAudioPath(uploadPath)
-                                    setUploadedAudio({ name: e.target.files[0].name, path: uploadPath })
+                                    setUploadedAudio({ name: e.target.files[0].name, path: uploadPath, file: e.target.files[0]  })
                                 }}
                             />
                         </Button>

@@ -8,12 +8,21 @@ from dataset import *
 import torch
 import pandas as pd
 
+from werkzeug.utils import secure_filename
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+UPLOAD_FOLDER = '/userUploads'
+ALLOWED_EXTENSIONS = {'mp3'}
+
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 print(config)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def convert(filename):
 
@@ -48,12 +57,6 @@ def predict(model_path, mel, config):
     output_df = output_df.sort_values(by='Probability', ascending=False)
     return output_df
 
-# def process_uploaded_file(file_path):
-#     mel = convert(file_path)
-#     output_df = predict(mel, config)
-#     st.write("Result:")
-#     st.dataframe(output_df)
-
 
 @app.route('/hello/', methods=['GET', 'POST'])
 @cross_origin()
@@ -63,24 +66,22 @@ def welcome():
 
 @app.route('/predict/', methods=['GET', 'POST'])
 @cross_origin()
-def predict1():
-    return jsonify(data=[1, 2, 3])
-
-
-@app.route('/predict2/', methods=['GET', 'POST'])
-@cross_origin()
-def predict2():
+def _predict():
     if request.method == 'POST':
-        print(request.form['audioPath'])
-        print(request.form['modelPath'])
-        file_path = request.form['audioPath']
-        model_path = request.form['modelPath']
+        if not request.files.get('uploadedAudio'):
+            file_path = request.form['audioPath']
+            model_path = request.form['modelPath']
+        else:
+            file_path = request.files['uploadedAudio']
+            model_path = request.form['modelPath']
+        print(file_path, model_path)
         mel = convert(file_path)
         print(mel)
         result = predict(model_path, mel, config)
         print(result.reset_index().to_json(orient="records"))
         
         return result.reset_index().to_json(orient="records")
+
 
 
 if __name__ == '__main__':
