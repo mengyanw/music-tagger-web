@@ -43,13 +43,13 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 function HomeScreen() {
-    const [audioPath, setAudioPath] = useState('./1.mp3');
-    const [modelPath, setModelPath] = useState('./baseline.onnx');
+    const [audioPath, setAudioPath] = useState('./audio/1.mp3');
+    const [modelPath, setModelPath] = useState('./model/baseline.onnx');
     const [loading, setLoading] = useState(false)
     const [runningResult, setRunningResult] = useState([]);
     const [processDesc, setProcessDesc] = useState([])
 
-    const currTrack = new Track(audioPath, "./abcover.png", audioPath.slice(2,), "", audioPath)
+    const currTrack = new Track(audioPath, "./abcover.png", audioPath.slice(8,), "", audioPath)
     PlayerInterface.play([currTrack])
 
     const handleRunningRequest = async () => {
@@ -89,12 +89,12 @@ function HomeScreen() {
                             label="Audio"
                             onChange={(event) => setAudioPath(event.target.value)}
                         >
-                            <MenuItem value={'./1.mp3'}>Example1.mp3</MenuItem>
-                            <MenuItem value={'./2.mp3'}>Example2.mp3</MenuItem>
-                            <MenuItem value={'./3.mp3'}>Example3.mp3</MenuItem>
-                            <MenuItem value={'./shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
-                            <MenuItem value={'./running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
-                            <MenuItem value={'./red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem>
+                            <MenuItem value={'./audio/1.mp3'}>Example 1.mp3</MenuItem>
+                            <MenuItem value={'./audio/2.mp3'}>Example 2.mp3</MenuItem>
+                            <MenuItem value={'./audio/3.mp3'}>Example 3.mp3</MenuItem>
+                            <MenuItem value={'./audio/shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
+                            <MenuItem value={'./audio/running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
+                            <MenuItem value={'./audio/red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem>
 
                         </Select>
                     </FormControl>
@@ -107,8 +107,8 @@ function HomeScreen() {
                             label="Model"
                             onChange={(event) => setModelPath(event.target.value)}
                         >
-                            <MenuItem value={'./baseline.onnx'}>Baseline1 model</MenuItem>
-                            <MenuItem value={'./test.onnx'}>Baseline2 model</MenuItem>
+                            <MenuItem value={'./model/baseline.onnx'}>Baseline 1 model</MenuItem>
+                            <MenuItem value={'./model/test.onnx'}>Baseline 2 model</MenuItem>
                         </Select>
                     </FormControl>
                 </Container>
