@@ -22,9 +22,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 
-import Player from 'react-material-music-player'
-import { Track, PlayerInterface } from 'react-material-music-player'
-
 
 import { useState } from "react";
 import {
@@ -48,9 +45,7 @@ function HomeScreen() {
     const [loading, setLoading] = useState(false)
     const [runningResult, setRunningResult] = useState([]);
     const [processDesc, setProcessDesc] = useState([])
-
-    const currTrack = new Track(audioPath, "./abcover.png", audioPath.slice(8,), "", audioPath)
-    PlayerInterface.play([currTrack])
+    const [uploadedAudio, setUploadedAudio] = useState({})
 
     const handleRunningRequest = async () => {
         setRunningResult([])
@@ -78,26 +73,8 @@ function HomeScreen() {
 
     return (
         <Container maxWidth="md" sx={{ marginBottom: 10 }}>
-            <Container sx={{ display: 'flex', flexDirection: 'row', mb: 2, mr: 5 }}>
-                <Container disableGutters>
-                    <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
-                        <InputLabel id="demo-select-small">Audio</InputLabel>
-                        <Select
-                            labelId="demo-select-small"
-                            id="demo-select-small"
-                            value={audioPath}
-                            label="Audio"
-                            onChange={(event) => setAudioPath(event.target.value)}
-                        >
-                            <MenuItem value={'./audio/1.mp3'}>Example 1.mp3</MenuItem>
-                            <MenuItem value={'./audio/2.mp3'}>Example 2.mp3</MenuItem>
-                            <MenuItem value={'./audio/3.mp3'}>Example 3.mp3</MenuItem>
-                            <MenuItem value={'./audio/shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
-                            <MenuItem value={'./audio/running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
-                            <MenuItem value={'./audio/red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem>
-
-                        </Select>
-                    </FormControl>
+            <Container sx={{ display: 'flex', flexDirection: 'column', mb: 2}}>
+                <Container disableGutters sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', }}>
                     <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
                         <InputLabel id="demo-select-small">Model</InputLabel>
                         <Select
@@ -111,18 +88,58 @@ function HomeScreen() {
                             <MenuItem value={'./model/test.onnx'}>Baseline 2 model</MenuItem>
                         </Select>
                     </FormControl>
+                    <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
+                            <InputLabel id="demo-select-small">Audio</InputLabel>
+                            <Select
+                                labelId="demo-select-small"
+                                id="demo-select-small"
+                                value={audioPath}
+                                label="Audio"
+                                onChange={(event) => setAudioPath(event.target.value)}
+                            >
+                                <MenuItem value={'./audio/1.mp3'}>Example 1.mp3</MenuItem>
+                                <MenuItem value={'./audio/2.mp3'}>Example 2.mp3</MenuItem>
+                                <MenuItem value={'./audio/3.mp3'}>Example 3.mp3</MenuItem>
+                                <MenuItem value={'./audio/shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
+                                <MenuItem value={'./audio/running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
+                                <MenuItem value={'./audio/red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem>
+                                {uploadedAudio ? <MenuItem value={uploadedAudio.path}>{uploadedAudio.name}</MenuItem> : {}}
+                            </Select>
+                        </FormControl>
+                        <Typography sx={{ m: 1 }} >
+                            OR
+                        </Typography>
+                        <Button
+                            variant="outlined"
+                            component="label"
+                            sx={{ minWidth: 200 }}
+                        >
+                            Upload audio file
+                            <input
+                                type="file"
+                                hidden
+                                accept=".mp3"
+                                onChange={(e) => {
+                                    let uploadPath = URL.createObjectURL(e.target.files[0]) 
+                                    setAudioPath(uploadPath)
+                                    setUploadedAudio({ name: e.target.files[0].name, path: uploadPath })
+                                }}
+                            />
+                        </Button>
+                    </Container>
                 </Container>
-
-                <Button
-                    variant='outlined'
-                    onClick={handleRunningRequest}
-                    sx={{ width: '10rem', mr: 1 }}
-                >
-                    Run
-                </Button>
+                <audio src={audioPath} controls style={{width: '90%', padding: '1rem', margin: 'auto'}}/>
+                <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Button
+                        variant='contained'
+                        onClick={handleRunningRequest}
+                        sx={{ minWidth: 200, ml: 1}}
+                    >
+                        Run
+                    </Button>
+                </Container>
             </Container>
-
-            <Player sx={{ width: '53em', display: 'block', position: 'relative', mb: 5, boxShadow: 1 }} disableDrawer={false} />
 
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 1, sm: 4 }}>
