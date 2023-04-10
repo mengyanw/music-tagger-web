@@ -1,7 +1,7 @@
 # In-browser music tagger
 Mengyan Wu
 
-## Implementation 1: static React + ONNX website (main branch)
+## Implementation 1: static React + ONNX website (onnx branch)
 ### Setup
 install dependencies `npm install`
 
