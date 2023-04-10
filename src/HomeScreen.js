@@ -22,6 +22,14 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+// import Paper from '@mui/material/Paper';
+
 
 import { useState } from "react";
 import {
@@ -30,50 +38,70 @@ import {
     LoadMp3, GenerateMelSpec, CropAndFlatten, CreateONNXTensor, RunModel, FinalizeResult
 } from "./utils"
 
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
-
 
 function HomeScreen() {
-    const [audioPath, setAudioPath] = useState('./audio/1.mp3');
-    const [modelPath, setModelPath] = useState('./model/baseline.onnx');
+    const [audioPath, setAudioPath] = useState('1.mp3');
+    const [modelPath, setModelPath] = useState('samplecnn.pt');
     const [loading, setLoading] = useState(false)
+    const [isInitial, setIsInitial] = useState(true)
     const [runningResult, setRunningResult] = useState([]);
     const [processDesc, setProcessDesc] = useState([])
     const [uploadedAudio, setUploadedAudio] = useState({})
+    const serviceAudioPath = audioPath === uploadedAudio?.path ? audioPath : '../public/audio/' + audioPath
+    const playerAudioPath = audioPath === uploadedAudio?.path ? audioPath : './audio/' + audioPath
 
     const handleRunningRequest = async () => {
         setRunningResult([])
         setProcessDesc([])
         setLoading(true);
+        if (isInitial) setIsInitial(false)
 
-        setProcessDesc((prev) => [...prev, "Loading MP3 file 🎵"])
-        const audioBuffer = await LoadMp3(audioPath)
-        setProcessDesc((prev) => [...prev, "Resampling and converting signal ⌛️"])
-        setProcessDesc((prev) => [...prev, "Generating mel spectrogram ⌛️"])
-        const melSpec = await GenerateMelSpec(audioBuffer)
-        setProcessDesc((prev) => [...prev, "Cropping and flattening data ⌛️"])
-        const processedData = await CropAndFlatten(melSpec)
-        setProcessDesc((prev) => [...prev, "Creating tensor ⌛️"])
-        const inputTensor = await CreateONNXTensor(processedData)
-        setProcessDesc((prev) => [...prev, "Running model ⌛️"])
-        const outputMap = await RunModel(inputTensor, modelPath)
-        setProcessDesc((prev) => [...prev, "Grabbing results ☕️"])
-        const result = await FinalizeResult(outputMap)
-        setProcessDesc((prev) => [...prev, "Finished 🎉🎉🎉"])
+        const formData = new FormData();
 
-        setRunningResult(result)
-        setLoading(false)
+        formData.append('audioPath', serviceAudioPath);
+        formData.append('modelPath', '../public/model/' + modelPath);
+
+        const uploadedAudioFile = audioPath === uploadedAudio?.path ? uploadedAudio?.file : undefined 
+        formData.append('uploadedAudio', uploadedAudioFile)
+           
+        console.log(formData.get('audioPath'), formData.get('uploadedAudio'));
+
+        // setProcessDesc((prev) => [...prev, "Loading MP3 file 🎵"])
+        // const audioBuffer = await LoadMp3(audioPath)
+        // setProcessDesc((prev) => [...prev, "Resampling and converting signal ⌛️"])
+        // setProcessDesc((prev) => [...prev, "Generating mel spectrogram ⌛️"])
+        // const melSpec = await GenerateMelSpec(audioBuffer)
+        // setProcessDesc((prev) => [...prev, "Cropping and flattening data ⌛️"])
+        // const processedData = await CropAndFlatten(melSpec)
+        // setProcessDesc((prev) => [...prev, "Creating tensor ⌛️"])
+        // const inputTensor = await CreateONNXTensor(processedData)
+        // setProcessDesc((prev) => [...prev, "Running model ⌛️"])
+        // const outputMap = await RunModel(inputTensor, modelPath)
+        // setProcessDesc((prev) => [...prev, "Grabbing results ☕️"])
+        // const result = await FinalizeResult(outputMap)
+        // setProcessDesc((prev) => [...prev, "Finished 🎉🎉🎉"])
+
+        fetch('http://127.0.0.1:5000/predict/', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => {
+                console.log(res)
+                return res.json()
+            })
+            .then(data => {
+                console.log(data);
+                setRunningResult(data);
+                setLoading(false)
+            });
+
+        // setRunningResult(result)
+        // setLoading(false)
     }
 
     return (
         <Container maxWidth="md" sx={{ marginBottom: 10 }}>
-            <Container sx={{ display: 'flex', flexDirection: 'column', mb: 2}}>
+            <Container sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
                 <Container disableGutters sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', }}>
                     <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
                         <InputLabel id="demo-select-small">Model</InputLabel>
@@ -84,8 +112,9 @@ function HomeScreen() {
                             label="Model"
                             onChange={(event) => setModelPath(event.target.value)}
                         >
-                            <MenuItem value={'./model/baseline.onnx'}>Baseline 1 model</MenuItem>
-                            <MenuItem value={'./model/test.onnx'}>Baseline 2 model</MenuItem>
+                            <MenuItem value={'samplecnn.pt'}>CNN model</MenuItem>
+                            <MenuItem value={'musicnn.pt'}>MusiCNN model</MenuItem>
+                            <MenuItem value={'fcn.pt'}>FCN model</MenuItem>
                         </Select>
                     </FormControl>
                     <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -98,12 +127,11 @@ function HomeScreen() {
                                 label="Audio"
                                 onChange={(event) => setAudioPath(event.target.value)}
                             >
-                                <MenuItem value={'./audio/1.mp3'}>Example 1.mp3</MenuItem>
-                                <MenuItem value={'./audio/2.mp3'}>Example 2.mp3</MenuItem>
-                                <MenuItem value={'./audio/3.mp3'}>Example 3.mp3</MenuItem>
-                                <MenuItem value={'./audio/shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
-                                <MenuItem value={'./audio/running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
-                                <MenuItem value={'./audio/red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem>
+                                {[...Array(3).keys()].map((n) => 
+                                    <MenuItem value={String(n + 1) + '.mp3'}>Example {n + 1}.mp3</MenuItem>
+                                )}
+                                <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
+                                <MenuItem value={'running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
                                 {uploadedAudio ? <MenuItem value={uploadedAudio.path}>{uploadedAudio.name}</MenuItem> : {}}
                             </Select>
                         </FormControl>
@@ -121,20 +149,20 @@ function HomeScreen() {
                                 hidden
                                 accept=".mp3"
                                 onChange={(e) => {
-                                    let uploadPath = URL.createObjectURL(e.target.files[0]) 
+                                    let uploadPath = URL.createObjectURL(e.target.files[0])
                                     setAudioPath(uploadPath)
-                                    setUploadedAudio({ name: e.target.files[0].name, path: uploadPath })
+                                    setUploadedAudio({ name: e.target.files[0].name, path: uploadPath, file: e.target.files[0]  })
                                 }}
                             />
                         </Button>
                     </Container>
                 </Container>
-                <audio src={audioPath} controls style={{width: '90%', padding: '1rem', margin: 'auto'}}/>
+                <audio src={playerAudioPath} controls style={{ width: '90%', padding: '1rem', margin: 'auto' }} />
                 <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Button
                         variant='contained'
                         onClick={handleRunningRequest}
-                        sx={{ minWidth: 200, ml: 1}}
+                        sx={{ minWidth: 200, ml: 1 }}
                     >
                         Run
                     </Button>
@@ -142,8 +170,9 @@ function HomeScreen() {
             </Container>
 
             <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 1, sm: 4 }}>
-                    <Grid item xs={1} sm={2} key={0}>
+                {/* <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 1, sm: 4 }}> */}
+                <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 1, sm: 1 }}>
+                    {/* <Grid item xs={1} sm={2} key={0}>
                         <Card sx={{ minWidth: 275, minHeight: 420 }}>
                             <CardContent>
                                 <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary" gutterBottom>
@@ -163,22 +192,45 @@ function HomeScreen() {
                                 </List>
                             </CardContent>
                         </Card>
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={1} sm={2} key={1}>
                         <Card sx={{ minWidth: 275, minHeight: 420 }}>
                             <CardContent>
                                 <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary" gutterBottom>
                                     Result
                                 </Typography>
-                                <Stack direction="column" spacing={4}>
-                                {runningResult !== [] &&
-                                    runningResult.map(each => <Item key={each}>{each}</Item>)
+                                {loading ? <Typography>Loading...</Typography> :
+                                    (isInitial ? <div></div> :
+                                        <TableContainer component={Paper}>
+                                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                                <TableHead>
+                                                    <TableRow>
+                                                        {/* <TableCell align="center">Category</TableCell> */}
+                                                        <TableCell align="center">Tag</TableCell>
+                                                        <TableCell align="center">Probability</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {runningResult.map((row) => (
+                                                        <TableRow
+                                                            key={row.index}
+                                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                        >
+                                                            {/* <TableCell align="center">{row.Category}</TableCell> */}
+                                                            <TableCell align="center">{row.Tag}</TableCell>
+                                                            <TableCell align="center">{row.Probability.toFixed(4)}</TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    )
                                 }
-                                </Stack>
                             </CardContent>
                         </Card>
                     </Grid>
                 </Grid>
+
             </Box>
         </Container>
     );
