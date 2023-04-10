@@ -112,9 +112,9 @@ function HomeScreen() {
                             label="Model"
                             onChange={(event) => setModelPath(event.target.value)}
                         >
-                            <MenuItem value={'fcn.pt'}>FCN model</MenuItem>
+                            {/* <MenuItem value={'fcn.pt'}>FCN model</MenuItem> */}
                             <MenuItem value={'samplecnn.pt'}>CNN model</MenuItem>
-                            <MenuItem value={'musicnn.pt'}>MusiCNN model</MenuItem>
+                            {/* <MenuItem value={'musicnn.pt'}>MusiCNN model</MenuItem> */}
                         </Select>
                     </FormControl>
                     <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
