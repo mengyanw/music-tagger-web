@@ -1,0 +1,18 @@
+{
+    "film": "[film, movie, trailer, documentary]",
+    "uplifting/euphoric": "[energetic, upbeat, uplifting, powerful, summer]",
+    "relaxing/soothing": "[relaxing, calm, meditative, slow, soft, mellow, dream]",
+    "somber": "[emotional, sad, melancholic, deep, ballad]",
+    "corporate": "[advertising, commercial, corporate]",
+    "festive": "[party, sport, holiday, christmas]",
+    "thrilling": "[horror, action, adventure, fast]",
+    "rhythmic": "[sexy, melodic, groovy, retro]",
+    "inspiring": "[inspiring, motivational, hopeful, travel]",
+    "joyful": "[children, fun, funny, game]",
+    "happy": "[happy, positive]",
+    "love": "[love, romantic]",
+    "drama": "[drama, dramatic]",
+    "dark/heavy": "[heavy, dark]",
+    "grand/powerful": "[epic, space]",
+    "ambiental": "[soundscape, background, cool, ambiental, nature]"
+}

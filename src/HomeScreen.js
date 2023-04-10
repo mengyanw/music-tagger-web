@@ -127,7 +127,7 @@ function HomeScreen() {
                                 label="Audio"
                                 onChange={(event) => setAudioPath(event.target.value)}
                             >
-                                {[...Array(15).keys()].map((n) => 
+                                {[...Array(3).keys()].map((n) => 
                                     <MenuItem value={String(n + 1) + '.mp3'}>Example {n + 1}.mp3</MenuItem>
                                 )}
                                 <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
@@ -205,7 +205,7 @@ function HomeScreen() {
                                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell align="center">Category</TableCell>
+                                                        {/* <TableCell align="center">Category</TableCell> */}
                                                         <TableCell align="center">Tag</TableCell>
                                                         <TableCell align="center">Probability</TableCell>
                                                     </TableRow>
@@ -216,7 +216,7 @@ function HomeScreen() {
                                                             key={row.index}
                                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                         >
-                                                            <TableCell align="center">{row.Category}</TableCell>
+                                                            {/* <TableCell align="center">{row.Category}</TableCell> */}
                                                             <TableCell align="center">{row.Tag}</TableCell>
                                                             <TableCell align="center">{row.Probability.toFixed(4)}</TableCell>
                                                         </TableRow>
