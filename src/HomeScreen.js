@@ -112,9 +112,9 @@ function HomeScreen() {
                             label="Model"
                             onChange={(event) => setModelPath(event.target.value)}
                         >
-                            {/* <MenuItem value={'fcn.pt'}>FCN model</MenuItem> */}
                             <MenuItem value={'samplecnn.pt'}>CNN model</MenuItem>
-                            {/* <MenuItem value={'musicnn.pt'}>MusiCNN model</MenuItem> */}
+                            <MenuItem value={'musicnn.pt'}>MusiCNN model</MenuItem>
+                            <MenuItem value={'fcn.pt'}>FCN model</MenuItem>
                         </Select>
                     </FormControl>
                     <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -127,12 +127,11 @@ function HomeScreen() {
                                 label="Audio"
                                 onChange={(event) => setAudioPath(event.target.value)}
                             >
-                                <MenuItem value={'1.mp3'}>Example 1.mp3</MenuItem>
-                                <MenuItem value={'2.mp3'}>Example 2.mp3</MenuItem>
-                                <MenuItem value={'3.mp3'}>Example 3.mp3</MenuItem>
+                                {[...Array(15).keys()].map((n) => 
+                                    <MenuItem value={String(n + 1) + '.mp3'}>Example {n + 1}.mp3</MenuItem>
+                                )}
                                 <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
                                 <MenuItem value={'running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
-                                {/* <MenuItem value={'red_ruby_da_sleeze.mp3'}>Red Ruby Da Sleeze (Nicki Minaj).mp3</MenuItem> */}
                                 {uploadedAudio ? <MenuItem value={uploadedAudio.path}>{uploadedAudio.name}</MenuItem> : {}}
                             </Select>
                         </FormControl>
