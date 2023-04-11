@@ -40,8 +40,8 @@ import {
 
 
 function HomeScreen() {
-    const [audioPath, setAudioPath] = useState('1.mp3');
-    const [modelPath, setModelPath] = useState('samplecnn.pt');
+    const [audioPath, setAudioPath] = useState('Hey_Jude_The_Beatles.mp3');
+    const [modelPath, setModelPath] = useState('musicnn.pt');
     const [loading, setLoading] = useState(false)
     const [isInitial, setIsInitial] = useState(true)
     const [runningResult, setRunningResult] = useState([]);
@@ -81,7 +81,7 @@ function HomeScreen() {
         // const result = await FinalizeResult(outputMap)
         // setProcessDesc((prev) => [...prev, "Finished 🎉🎉🎉"])
 
-        fetch('http://127.0.0.1:5000/predict/', {
+        fetch('/api/predict/', {
             method: 'POST',
             body: formData
         })
@@ -127,11 +127,15 @@ function HomeScreen() {
                                 label="Audio"
                                 onChange={(event) => setAudioPath(event.target.value)}
                             >
-                                {[...Array(3).keys()].map((n) => 
+                                {/* {[...Array(3).keys()].map((n) => 
                                     <MenuItem value={String(n + 1) + '.mp3'}>Example {n + 1}.mp3</MenuItem>
-                                )}
+                                )} */}
+                                <MenuItem value={'Hey_Jude_The_Beatles.mp3'}>Hey Jude.mp3</MenuItem>
+                                <MenuItem value={'Yellow_Submarine_The_Beatles.mp3'}>Yellow Submarine.mp3</MenuItem>
+                                <MenuItem value={'Hotel_California.mp3'}>Hotel California.mp3</MenuItem>
                                 <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
                                 <MenuItem value={'running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
+
                                 {uploadedAudio ? <MenuItem value={uploadedAudio.path}>{uploadedAudio.name}</MenuItem> : {}}
                             </Select>
                         </FormControl>

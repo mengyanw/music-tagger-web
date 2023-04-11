@@ -36,7 +36,7 @@ def welcome():
     return "Hello World!"
 
 
-@app.route('/predict/', methods=['GET', 'POST'])
+@app.route('/api/predict/', methods=['GET', 'POST'])
 @cross_origin()
 def _predict():
     if request.method == 'POST':
