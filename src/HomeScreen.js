@@ -112,7 +112,7 @@ function HomeScreen() {
                             label="Model"
                             onChange={(event) => setModelPath(event.target.value)}
                         >
-                            <MenuItem value={'samplecnn.pt'}>CNN model</MenuItem>
+                            <MenuItem value={'samplecnn.pt'}>Sample-level CNN model</MenuItem>
                             <MenuItem value={'musicnn.pt'}>MusiCNN model</MenuItem>
                             <MenuItem value={'fcn.pt'}>FCN model</MenuItem>
                         </Select>
