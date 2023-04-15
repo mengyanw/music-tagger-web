@@ -134,11 +134,16 @@ function HomeScreen() {
                                         {/* {[...Array(3).keys()].map((n) => 
                                             <MenuItem value={String(n + 1) + '.mp3'}>Example {n + 1}.mp3</MenuItem>
                                         )} */}
-                                        <MenuItem value={'Hey_Jude_The_Beatles.mp3'}>Hey Jude.mp3</MenuItem>
-                                        <MenuItem value={'Yellow_Submarine_The_Beatles.mp3'}>Yellow Submarine.mp3</MenuItem>
-                                        <MenuItem value={'Hotel_California.mp3'}>Hotel California.mp3</MenuItem>
-                                        <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
-                                        <MenuItem value={'running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
+                                        <MenuItem value={'Hey_Jude_The_Beatles.mp3'}>Hey Jude (The Beatles)</MenuItem>
+                                        <MenuItem value={'Yellow_Submarine_The_Beatles.mp3'}>Yellow Submarine (The Beatles)</MenuItem>
+                                        <MenuItem value={'Hotel_California.mp3'}>Hotel California</MenuItem>
+                                        <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink)</MenuItem>
+                                        <MenuItem value={'running_up_that_hill.mp3'}>Running up that hill (Kate Bush)</MenuItem>
+                                        <MenuItem value={'christmas.mp3'}>All I want for Christmas is you</MenuItem>
+                                        <MenuItem value={'welcome.mp3'}>Welcome to the jungle</MenuItem>
+                                        <MenuItem value={'asitwas.mp3'}>As it was (Harry Styles)</MenuItem>
+                                        <MenuItem value={'wakawaka.mp3'}>Waka Waka</MenuItem>
+                                        <MenuItem value={'viva.mp3'}>Viva la vida (Coldplay)</MenuItem>
 
                                         {uploadedAudio ? <MenuItem value={uploadedAudio.path}>{uploadedAudio.name}</MenuItem> : {}}
                                     </Select>
