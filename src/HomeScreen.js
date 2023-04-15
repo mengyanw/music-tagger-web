@@ -102,71 +102,74 @@ function HomeScreen() {
     return (
         <Container maxWidth="md" sx={{ marginBottom: 10 }}>
             <Container sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                <Container disableGutters sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', }}>
-                    <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
-                        <InputLabel id="demo-select-small">Model</InputLabel>
-                        <Select
-                            labelId="demo-select-small"
-                            id="demo-select-small"
-                            value={modelPath}
-                            label="Model"
-                            onChange={(event) => setModelPath(event.target.value)}
-                        >
-                            <MenuItem value={'samplecnn.pt'}>Sample-level CNN model</MenuItem>
-                            <MenuItem value={'musicnn.pt'}>MusiCNN model</MenuItem>
-                            <MenuItem value={'fcn.pt'}>FCN model</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                        <FormControl sx={{ m: 1, minWidth: 200 }} size="medium">
-                            <InputLabel id="demo-select-small">Audio</InputLabel>
-                            <Select
-                                labelId="demo-select-small"
-                                id="demo-select-small"
-                                value={audioPath}
-                                label="Audio"
-                                onChange={(event) => setAudioPath(event.target.value)}
-                            >
-                                {/* {[...Array(3).keys()].map((n) => 
-                                    <MenuItem value={String(n + 1) + '.mp3'}>Example {n + 1}.mp3</MenuItem>
-                                )} */}
-                                <MenuItem value={'Hey_Jude_The_Beatles.mp3'}>Hey Jude.mp3</MenuItem>
-                                <MenuItem value={'Yellow_Submarine_The_Beatles.mp3'}>Yellow Submarine.mp3</MenuItem>
-                                <MenuItem value={'Hotel_California.mp3'}>Hotel California.mp3</MenuItem>
-                                <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
-                                <MenuItem value={'running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
+                <Box sx={{ flexGrow: 1 }}>
+                    <Grid container columns={{ xs: 1, sm: 4 }}>
+                        <Grid item xs={1} sm={2} key={1} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <FormControl sx={{ m: 1, minWidth: 250 }} size="medium">
+                                <InputLabel id="demo-select-small">Model</InputLabel>
+                                <Select
+                                    labelId="demo-select-small"
+                                    id="demo-select-small"
+                                    value={modelPath}
+                                    label="Model"
+                                    onChange={(event) => setModelPath(event.target.value)}
+                                >
+                                    <MenuItem value={'samplecnn.pt'}>Sample-level CNN model</MenuItem>
+                                    <MenuItem value={'musicnn.pt'}>MusiCNN model</MenuItem>
+                                    <MenuItem value={'fcn.pt'}>FCN model</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={1} sm={2} key={2}>
+                            <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <FormControl sx={{ m: 1, minWidth: 125 }} size="medium">
+                                    <InputLabel id="demo-select-small">Audio</InputLabel>
+                                    <Select
+                                        labelId="demo-select-small"
+                                        id="demo-select-small"
+                                        value={audioPath}
+                                        label="Audio"
+                                        onChange={(event) => setAudioPath(event.target.value)}
+                                    >
+                                        {/* {[...Array(3).keys()].map((n) => 
+                                            <MenuItem value={String(n + 1) + '.mp3'}>Example {n + 1}.mp3</MenuItem>
+                                        )} */}
+                                        <MenuItem value={'Hey_Jude_The_Beatles.mp3'}>Hey Jude.mp3</MenuItem>
+                                        <MenuItem value={'Yellow_Submarine_The_Beatles.mp3'}>Yellow Submarine.mp3</MenuItem>
+                                        <MenuItem value={'Hotel_California.mp3'}>Hotel California.mp3</MenuItem>
+                                        <MenuItem value={'shut_down_blackpink.mp3'}>Shut down (BlackPink).mp3</MenuItem>
+                                        <MenuItem value={'running_up_that_hill.mp3'}>Running up that hill (Kate Bush).mp3</MenuItem>
 
-                                {uploadedAudio ? <MenuItem value={uploadedAudio.path}>{uploadedAudio.name}</MenuItem> : {}}
-                            </Select>
-                        </FormControl>
-                        <Typography sx={{ m: 1 }} >
-                            OR
-                        </Typography>
-                        <Button
-                            variant="outlined"
-                            component="label"
-                            sx={{ minWidth: 200 }}
-                        >
-                            Upload audio file
-                            <input
-                                type="file"
-                                hidden
-                                accept=".mp3"
-                                onChange={(e) => {
-                                    let uploadPath = URL.createObjectURL(e.target.files[0])
-                                    setAudioPath(uploadPath)
-                                    setUploadedAudio({ name: e.target.files[0].name, path: uploadPath, file: e.target.files[0]  })
-                                }}
-                            />
-                        </Button>
-                    </Container>
-                </Container>
+                                        {uploadedAudio ? <MenuItem value={uploadedAudio.path}>{uploadedAudio.name}</MenuItem> : {}}
+                                    </Select>
+                                </FormControl>
+                                <Button
+                                    variant="outlined"
+                                    component="label"
+                                    sx={{ minWidth: 100 }}
+                                >
+                                    Upload audio file
+                                    <input
+                                        type="file"
+                                        hidden
+                                        accept=".mp3"
+                                        onChange={(e) => {
+                                            let uploadPath = URL.createObjectURL(e.target.files[0])
+                                            setAudioPath(uploadPath)
+                                            setUploadedAudio({ name: e.target.files[0].name, path: uploadPath, file: e.target.files[0]  })
+                                        }}
+                                    />
+                                </Button>
+                            </Container>
+                        </Grid>
+                    </Grid>
+                </Box>
                 <audio src={playerAudioPath} controls style={{ width: '90%', padding: '1rem', margin: 'auto' }} />
                 <Container disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Button
                         variant='contained'
                         onClick={handleRunningRequest}
-                        sx={{ minWidth: 200, ml: 1 }}
+                        sx={{ minWidth: 125, ml: 1 }}
                     >
                         Run
                     </Button>
