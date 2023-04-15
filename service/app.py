@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 import yaml
 
 import sys
+sys.path.append('ml')
 sys.path.append('ml/run')
 from dataset import *
 from train import *
