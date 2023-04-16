@@ -7,10 +7,10 @@ function ReportScreen() {
     return (
         <>
             <Container maxWidth="md" sx={{ marginBottom: 10 }}>
-                <Typography variant="h5" mb={5}>Project Pitch</Typography>
+                <Typography variant="h5" mb={5}>Project Presentation</Typography>
                 <ReactGoogleSlides
                     width={"100%"}
-                    slidesLink="https://docs.google.com/presentation/d/1E7UU2hlorUFX68dGBQHP8KRNpKB5hXVNodulZvLooSA/edit#slide=id.g25f6af9dd6_0_0"
+                    slidesLink="https://docs.google.com/presentation/d/1JccFYkKy50q92hSpNuc2Fm_GMKEk0hXG8GEJibCGaIM/edit#slide=id.g25f6af9dd6_0_0"
                     slideDuration={5}
                     position={1}
                     showControls
