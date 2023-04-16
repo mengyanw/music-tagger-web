@@ -9,9 +9,7 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = [
     { text: 'Home', href: '/' },
@@ -122,9 +120,6 @@ function ResponsiveAppBar() {
                                         {page.text}
                                     </Link>
                                 </Button>
-                                // <Link key={page.text} href={page.href} sx={{ my: 2, color: 'white', display: 'block' }} >
-                                //     <Typography>{page.text}</Typography>
-                                // </Link>
                             ))
                         }
                     </Box>
