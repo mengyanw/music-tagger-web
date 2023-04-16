@@ -32,7 +32,6 @@ function ResponsiveAppBar() {
         <AppBar position="static" sx={{ mb: 10 }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    {/* h6 */}
                     <Typography
                         variant="h6"
                         noWrap
@@ -90,7 +89,6 @@ function ResponsiveAppBar() {
                         </Menu>
                     </Box>
 
-                    {/* h5 */}
                     <Typography
                         variant="h5"
                         noWrap
