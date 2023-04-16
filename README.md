@@ -1,18 +1,5 @@
 # In-browser music tagger
-Mengyan Wu
-
-## Implementation 1: static React + ONNX website (onnx branch)
-### Setup
-install dependencies `npm install`
-
-run `npm start`
-
-The website will run on http://localhost:3000/
-
-#### Use ngrok to put the app on internet
-`ngrok http --domain=xxx 3000`
-
-## Implementation 2:  React + Flask website (flask branch)
+## Implementation 1:  React + Flask website (main branch)
 ### Setup
 #### For UI (react)
 install dependencies `npm install`
@@ -32,6 +19,19 @@ The server will run on http://localhost:5000/
 
 #### Use ngrok to put the app on internet
 `ngrok http --domain=xxx 3000 --host-header="localhost:5000"`
+
+
+## Implementation 2: static React + ONNX website (onnx branch)
+### Setup
+install dependencies `npm install`
+
+run `npm start`
+
+The website will run on http://localhost:3000/
+
+#### Use ngrok to put the app on internet
+`ngrok http --domain=xxx 3000`
+
 
 ## Implementation 3: Streamlit
 see https://github.com/Jenniferlyx/si699-music-tagging
