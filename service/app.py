@@ -11,17 +11,12 @@ from train import *
 from models import *
 from music_tagger_app import convert, predict
 
-import torch
-import pandas as pd
-
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 UPLOAD_FOLDER = '/userUploads'
 ALLOWED_EXTENSIONS = {'mp3'}
 
-torch.manual_seed(0)
-np.random.seed(0)
 feature_extractor_type = 'raw'
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -49,7 +44,6 @@ def _predict():
             model_path = request.form['modelPath']
         print(file_path, model_path)
         mel = convert(file_path)
-        print(mel)
         result = predict(model_path, mel, config)
         print(result.reset_index().to_json(orient="records"))
         
