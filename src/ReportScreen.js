@@ -7,7 +7,7 @@ function ReportScreen() {
     return (
         <>
             <Container maxWidth="md" sx={{ marginBottom: 10 }}>
-                <Typography variant="h5" mb={5}>Project Presentation</Typography>
+                <Typography variant="h5" mb={5}>Presentation Slides</Typography>
                 <ReactGoogleSlides
                     width={"100%"}
                     slidesLink="https://docs.google.com/presentation/d/1JccFYkKy50q92hSpNuc2Fm_GMKEk0hXG8GEJibCGaIM/edit?usp=sharing"
@@ -19,7 +19,7 @@ function ReportScreen() {
             </Container>
             <Container maxWidth="md" sx={{ marginBottom: 10 }}>
                 <Typography variant="h5" mb={5}>Project Report</Typography>
-                <iframe src="https://docs.google.com/document/d/1ZqvR6anv8_8e3456rBQH-1fLUr8rbUYEwAXHsstYj30/edit" width="100%" height="800"></iframe>
+                <iframe src="https://drive.google.com/file/d/1WoPOSL07QOJnGUqpXRHvqr3MqTduujSH/preview" width="100%" height="800" allow="autoplay"></iframe>
             </Container>
         </>
     )

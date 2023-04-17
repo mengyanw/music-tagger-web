@@ -71,10 +71,10 @@ function HomeScreen() {
                                     onChange={(event) => setModelPath(event.target.value)}
                                 >
                                     <MenuItem value={'musicnn.pt'}>MusiCNN model <br /> tag precision: 0.8714, AUC-ROC: 0.9715</MenuItem>
-                                    <MenuItem value={'samplecnn.pt'}>Sample-level CNN model <br />tag precision: 0.5556, AUC-ROC: 0.5011</MenuItem>
                                     <MenuItem value={'crnn.pt'}>CRNN model <br />tag precision: 0.3592, AUC-ROC: 0.7094</MenuItem>
-                                    <MenuItem value={'fcn.pt'}>FCN model <br />tag precision: 0.3156, AUC-ROC: 0.6765</MenuItem>
+                                    <MenuItem value={'fcn.pt'}>FCN model <br />tag precision: 0.3196, AUC-ROC: 0.6765</MenuItem>
                                     <MenuItem value={'cnnsa.pt'}>CNNSA model <br />tag precision: 0.2905, AUC-ROC: 0.6673</MenuItem>
+                                    <MenuItem value={'samplecnn.pt'}>Sample-level CNN model <br />tag precision: 0.2684, AUC-ROC: 0.5556</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
